@@ -345,3 +345,23 @@
 {"level":30,"time":"2023-11-03T15:45:33.777Z","pid":30663,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","clientIP":"::1","api":"/api/v1/category/image/upload","data":{"categoryId":"653f723f336f234613760eae"},"msg":"Successfully updated Category images"}
 {"level":30,"time":"2023-11-03T15:45:39.695Z","pid":30663,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","clientIP":"::1","api":"/api/v1/category/image/upload","data":{"categoryId":"653f7247336f234613760eb0"},"msg":"Request received for update Category images"}
 {"level":30,"time":"2023-11-03T15:45:40.444Z","pid":30663,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","clientIP":"::1","api":"/api/v1/category/image/upload","data":{"categoryId":"653f7247336f234613760eb0"},"msg":"Successfully updated Category images"}
+{"level":30,"time":"2023-11-04T01:38:10.491Z","pid":36384,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T01:46:24.802Z","pid":36782,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T01:52:35.352Z","pid":37009,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:01:05.669Z","pid":37283,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:02:44.674Z","pid":37361,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:03:44.059Z","pid":37499,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:04:07.922Z","pid":37532,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:07:23.633Z","pid":37680,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:07:37.585Z","pid":37696,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:14:34.320Z","pid":37866,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:25:00.573Z","pid":38242,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:32:14.676Z","pid":38491,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:33:56.796Z","pid":38600,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:43:36.872Z","pid":38960,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:44:07.082Z","pid":39004,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:44:25.980Z","pid":39035,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:45:24.308Z","pid":39067,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:45:45.764Z","pid":39091,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-04T02:47:28.470Z","pid":39214,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}
+{"level":30,"time":"2023-11-05T02:01:01.039Z","pid":41198,"hostname":"subramaniams-MacBook-Air.local","server":"DEVELOPMENT","msg":"Server is running on Port 5001"}

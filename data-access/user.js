@@ -1,5 +1,5 @@
 const { UserRoles } = require("../constants/general")
-const Users = require("../models/mongodb/Users")
+const Users = require("../models/postgres/user")
 
 // Function for create user 
 exports.createUser = (payload) => {
@@ -39,9 +39,9 @@ exports.findUserByUserRoles = (payload) => {
     })
 }
 
-// function used to update user details by phone number
-exports.updateUserDetailsByPhone = async (payload) => {
-    return await Users.findOneAndUpdate({ phoneNumber: payload.phoneNumber }, payload, { upsert: true, new: true }).lean()
+// function used to update user details by email
+exports.updateUserDetailsByEmail = async (payload) => {
+    return await Users.findOneAndUpdate({ email: payload.email }, payload, { upsert: true, new: true }).lean()
         .then(result => {
             return {
                 success: true,

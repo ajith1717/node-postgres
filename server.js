@@ -63,6 +63,21 @@ require("./config/passport");
 app.get("/", (req, res) => {
     res.redirect("/ping")
 })
+
+
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend/register.html'));
+})
+
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend/login.html'));
+})
+app.get('/home', (req, res) => {
+
+    res.sendFile(path.join(__dirname, 'frontend/home.html'));
+
+})
+
 app.get("/ping", (req, res) => {
     console.log("PING")
     res.json({
@@ -72,7 +87,8 @@ app.get("/ping", (req, res) => {
     })
 });
 const userV1 = require("./routes/v1/users")
-const category = require("./routes/v1/category")
+
+
 
 
 
@@ -81,7 +97,6 @@ const category = require("./routes/v1/category")
 //     res.sendFile(`${__dirname}/public/login2.html`,)
 // })
 app.use("/api/v1/user", userV1);
-app.use("/api/v1/category", category)
 
 
 module.exports = app;
