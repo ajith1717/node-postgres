@@ -13,20 +13,6 @@ exports.signJWTToken = async (payload, options) => {
 
 
 
-exports.minuteFromNow = function (mins) {
-  var timeObject = new Date();
-  timeObject.setTime(timeObject.getTime() + mins * 1000 * 60);
-  return timeObject;
-};
-exports.secondsFromNow = (seconds) => {
-  let result = addSeconds(new Date(), seconds)
-  return result;
-}
-exports.minuteFromDate = function (date, mins) {
-  date.setTime(date.getTime() + mins * 1000 * 60);
-  return date;
-};
-
 
 // function is for  checking all the required fields are there
 // function is for  checking all the required fields are there
@@ -76,20 +62,3 @@ exports.requiredFieldCheck = function (result, requiredFields) {
   }
 }
 
-
-
-exports.compressImages = async (imgPath) => {
-  try {
-    let imageFile = await sharp(imgPath).resize().jpeg({
-      quality: 20,
-    })
-      .toFile('../compressedImg/output.jpg', (err, info) => {
-        console.log('err', err)
-        console.log('info', info)
-      });
-    return imageFile;
-  } catch (error) {
-    console.log('error', error)
-    throw error
-  }
-}

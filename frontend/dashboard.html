@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .add-button {
+            margin-top: 20px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        .add-button:hover {
+            background-color: #005F80;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="add-button">Add</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Rating</th>
+                <th>Cast</th>
+                <th>Genre</th>
+                <th>Release Date</th>
+                <th>Menu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Film 1</td>
+                <td>4.5</td>
+                <td>Actor A, Actor B</td>
+                <td>Action</td>
+                <td>2023-01-15</td>
+                <td>
+                    <a href="#">Edit</a> |
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Film 2</td>
+                <td>3.8</td>
+                <td>Actor C, Actor D</td>
+                <td>Drama</td>
+                <td>2023-02-20</td>
+                <td>
+                    <a href="#">Edit</a> |
+                    <a href="#">Delete</a>
+                </td>
+            </tr>
+            <!-- Add more rows as needed -->
+        </tbody>
+    </table>
+</body>
+
+</html>

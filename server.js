@@ -13,22 +13,8 @@ var path = require("path");
 /**
  * Pino log rotator
  */
-var logrotate = require("logrotator");
 const passport = require("passport");
-const { logger } = require("./config/pino-config");
-var rotator = logrotate.rotator;
-rotator.register("./logs/pino-logger.log", {
-    schedule: "5m",
-    size: "1m",
-    compress: true,
-    count: 10,
-});
-rotator.on("error", function (err) {
-    logger.error("oops, an error occurred!");
-});
-rotator.on("rotate", function (file) {
-    logger.info("file " + file + " was rotated!");
-});
+
 app.use(compression())
 app.use(cookieParser());
 app.use(helmet());
@@ -73,9 +59,11 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend/login.html'));
 })
 app.get('/home', (req, res) => {
-
     res.sendFile(path.join(__dirname, 'frontend/home.html'));
+})
 
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend/dashboard.html'));
 })
 
 app.get("/ping", (req, res) => {
@@ -87,6 +75,7 @@ app.get("/ping", (req, res) => {
     })
 });
 const userV1 = require("./routes/v1/users")
+const movieV1 = require("./routes/v1/movies")
 
 
 
@@ -97,6 +86,7 @@ const userV1 = require("./routes/v1/users")
 //     res.sendFile(`${__dirname}/public/login2.html`,)
 // })
 app.use("/api/v1/user", userV1);
+app.use("/api/v1/movie", movieV1);
 
 
 module.exports = app;

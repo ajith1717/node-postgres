@@ -1,22 +1,25 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./index');
 
-const Movie = sequelize.define('movies', {
+const Movies = sequelize.define('movies', {
     name: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING, defaultValue: ''
+    },
+    email: {
+        type: DataTypes.STRING, defaultValue: ''
     },
     rating: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.INTEGER, defaultValue: 1
     },
     cast: {
-        type: DataTypes.ARRAY(DataTypes.TEXT),
+        type: DataTypes.ARRAY(DataTypes.TEXT), defaultValue: []
     },
     genre: {
-        type: DataTypes.TEXT,
+        type: DataTypes.TEXT, defaultValue: ''
     },
     releaseDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATE, defaultValue: new Date()
     }
 });
 
-module.exports = Movie;
+module.exports = Movies;

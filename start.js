@@ -7,8 +7,8 @@ dotenv.config();
 const port = process.env.PORT || 5000;
 
 sequelize
-    .sync() // Sync the models with the database
-    // .sync({ alter: true })
+    // .sync() // Sync the models with the database
+    .sync({ alter: true })
     .then(() => {
         console.log('Database and tables synced.');
     })

@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const { HTTP_STATUS_CODE, errorSource } = require("../constants/general")
-const { userSignup, userLogout } = require("../services/users/user")
+const { userSignup, userLogout, userLogin } = require("../services/users/user")
 const { formatValidationErrorMessages } = require("../validations/validators");
 
 
@@ -32,10 +32,15 @@ exports.userSignup = async (req, res) => {
 }
 
 
-// API for update the user profile details
-exports.userLogout = async (req, res) => {
+// API for user login
+exports.userLogin = async (req, res) => {
     try {
-        let result = await userLogout(req.body);
+        const errors = validationResult(req)
+        if (errors.errors.length > 0) {
+            errors.source = errorSource.INPUT_VALIDATION.name
+            throw (errors)
+        }
+        let result = await userLogin(req.body);
         if (result.success) {
             res.status(HTTP_STATUS_CODE.OK).json(result)
         } else {
@@ -48,7 +53,9 @@ exports.userLogout = async (req, res) => {
         }
     } catch (err) {
         console.log('err', err)
-        res.status(HTTP_STATUS_CODE.BAD_REQUEST).json(({ success: false, msg: "Error occurred user logout", errors: err }))
+        res.status(HTTP_STATUS_CODE.BAD_REQUEST).json(({ success: false, msg: "Error occurred during Login", errors: err }))
     }
 }
+
+
 
