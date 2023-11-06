@@ -1,6 +1,6 @@
 const { UserPrivilegesList, HTTP_STATUS_CODE } = require("../../constants/general")
 const { findUserByPayload, createUser } = require("../../data-access/user")
-const { signJWTToken } = require("../../utils/utils")
+const { signJWTToken, bcryptPasswordMatch, generateBcryptPassword } = require("../../utils/utils")
 
 
 
@@ -20,15 +20,23 @@ exports.userSignup = async (payload) => {
                     errorCode: HTTP_STATUS_CODE.CONFLICT
                 }
             } else {
+                // encrypt the password
+                let encPassword = await generateBcryptPassword(payload.password);
+                payload.password = encPassword
                 // if user not exist then create the user
                 let result = await createUser(payload)
                 if (result.success) {
+                    let tokenPayload = {
+                        email: result.data.email,
+                    }
+                    let token = await signJWTToken(tokenPayload, { expiresIn: "31536000s" })
                     return {
                         success: true,
                         data: {
                             userDetails: {
                                 userId: result.data.id,
                                 name: result.data.name,
+                                token: token,
                                 email: result.data.email,
                             }
                         },
@@ -63,6 +71,16 @@ exports.userLogin = async (payload) => {
         if (userDetails.success) {
             // if user exist then return error
             if (userDetails.data.length > 0) {
+                // check password id correct or not
+                let passwordMatch = await bcryptPasswordMatch(payload.password, userDetails.data ? userDetails.data[0].password : "");
+
+                if (!passwordMatch) {
+                    return {
+                        success: false,
+                        msg: "Incorrect password",
+                        errorCode: HTTP_STATUS_CODE.UNAUTHORIZED
+                    }
+                }
                 userDetails.data = userDetails.data[0]
                 let tokenPayload = {
                     email: userDetails.data.email,

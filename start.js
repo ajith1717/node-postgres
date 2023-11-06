@@ -1,5 +1,6 @@
 const { logger } = require("./config/pino-config");
 const { create, findAll } = require("./data-access/sampleDAO");
+const { deleteAllUsers } = require("./data-access/user");
 const sequelize = require("./models/postgres");
 const app = require("./server")
 const dotenv = require('dotenv');
@@ -22,3 +23,5 @@ app.listen(port, () => {
     console.log(`Server is running on Port ${port}`,)
 });
 
+
+// deleteAllUsers()

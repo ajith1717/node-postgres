@@ -14,7 +14,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <script
         type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     <!-- Custom Theme files -->
-    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- <link href="css/style.css" rel="stylesheet" type="text/css" media="all" /> -->
     <!-- //Custom Theme files -->
     <!-- web font -->
     <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
@@ -896,50 +896,87 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             }
         }
     </style>
+    <script>
+        // <!-- check if user data in local storage the redirect to dashboard -->
+        // if (localStorage.getItem('user')) {
+        //     window.location.href = "/dashboard";
+        // }
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+
 </head>
 
 <body>
     <!-- main -->
     <div class="main-w3layouts wrapper">
         <h1>SignUp</h1>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <div class="main-agileinfo">
             <div class="agileits-top">
-                <form action="#" method="post">
-                    <input class="text" type="text" name="Username" placeholder="Username" required="">
+                <form id="signupForm" action="#" method="post">
+                    <input class="text" type="text" name="name" placeholder="Username" required="">
                     <input class="text email" type="email" name="email" placeholder="Email" required="">
                     <input class="text" type="password" name="password" placeholder="Password" required="">
-                    <!-- <input class="text w3lpass" type="password" name="password" placeholder="Confirm Password"
-                        required=""> -->
-                    <!-- <div class="wthree-text">
-                        <label class="anim">
-                            <input type="checkbox" class="checkbox" required="">
-                            <span>I Agree To The Terms & Conditions</span>
-                        </label>
-                        <div class="clear"> </div>
-                    </div> -->
                     <input type="submit" value="SIGNUP">
                 </form>
-                <p>Don't have an Account? <a href="#"> Login Now!</a></p>
+                <p>Already have an Account? <a href="/login"> Login Now!</a></p>
             </div>
+            <script>
+                document.getElementById("signupForm").addEventListener("submit", function (event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    // Get the form data
+                    const formData = new FormData(this);
+
+                    // Convert form data to a plain object
+                    const formObject = {};
+                    formData.forEach((value, key) => {
+                        formObject[key] = value;
+                    });
+                    console.log(formObject, "formObject")
+
+                    // You can now make an API request using the form data
+                    // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
+                    fetch('http://localhost:5001/api/v1/user/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formObject), // Convert the form data to JSON
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Handle the API response here
+                            console.log(data);
+                            if (!data.success) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: data.msg,
+                                    icon: 'error',
+                                });
+                                return;
+                            } else {
+                                // Display the API response using SweetAlert
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: data.msg,
+                                    icon: 'info',
+                                });
+                                // set data in local stroage
+                                localStorage.setItem('user', JSON.stringify(data.data.userDetails));
+                                // redirect the page after 3 sec
+                                setTimeout(() => {
+                                    window.location.href = "/dashboard";
+                                }, 3000);
+                            }
+
+                        })
+                        .catch(error => {
+                            console.error('API request error:', error);
+                        });
+                });
+            </script>
         </div>
-        <!-- copyright -->
-        <!-- <div class="colorlibcopy-agile">
-            <p>© 2018 Colorlib Signup Form. All rights reserved | Design by <a href="https://colorlib.com/"
-                    target="_blank">Colorlib</a></p>
-        </div> -->
-        <!-- //copyright -->
-        <!-- <ul class="colorlib-bubbles">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul> -->
     </div>
     <!-- //main -->
 </body>

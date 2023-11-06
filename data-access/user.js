@@ -32,3 +32,19 @@ exports.findUserByPayload = async (payload) => {
         })
 }
 
+
+// delete all users
+exports.deleteAllUsers = async () => {
+    return await sequelize.query(`DELETE FROM users`, { type: sequelize.QueryTypes.DELETE })
+        .then(result => {
+            return {
+                success: true,
+                data: result,
+                msg: "Successfully deleted all users"
+            }
+        }).catch(error => {
+            console.log(error)
+            throw error
+        })
+}
+

@@ -2,6 +2,7 @@
 const jwt = require('jsonwebtoken');
 const addSeconds = require('date-fns/addSeconds');
 const sharp = require('sharp');
+const bcrypt = require("bcryptjs");
 
 
 // function for sign jwt token
@@ -62,3 +63,28 @@ exports.requiredFieldCheck = function (result, requiredFields) {
   }
 }
 
+
+// Function for generate bcrypt password
+exports.generateBcryptPassword = async (plainTextPassword) => {
+  // SECURITY ISSUES FIX SNYK - CWE-547
+  let saltRounds = parseInt(10);
+  let hashedPassword = await bcrypt.hash(plainTextPassword, saltRounds);
+  return hashedPassword;
+}
+
+
+// function for match login password with db pass using bcrypt
+exports.bcryptPasswordMatch = async (plaintextPassword, encodedPassword) => {
+  return bcrypt.compare(plaintextPassword, encodedPassword)
+    .then(match => {
+      // console.log(`match`, match);
+      if (match) {
+        return match;
+      } else {
+        return false
+      }
+    }).catch(err => {
+      console.log(`error occurred during matching password`, err);
+      return false;
+    })
+}

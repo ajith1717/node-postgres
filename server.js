@@ -52,17 +52,21 @@ app.get("/", (req, res) => {
 
 
 app.get('/register', (req, res) => {
+    res.set("Content-Security-Policy", "default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'")
     res.sendFile(path.join(__dirname, 'frontend/register.html'));
 })
 
 app.get('/login', (req, res) => {
+    res.set("Content-Security-Policy", "default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'")
     res.sendFile(path.join(__dirname, 'frontend/login.html'));
 })
 app.get('/home', (req, res) => {
+    res.set("Content-Security-Policy", "default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'")
     res.sendFile(path.join(__dirname, 'frontend/home.html'));
 })
 
 app.get('/dashboard', (req, res) => {
+    res.set("Content-Security-Policy", "default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'")
     res.sendFile(path.join(__dirname, 'frontend/dashboard.html'));
 })
 
