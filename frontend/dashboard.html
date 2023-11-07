@@ -996,6 +996,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script>
+        // <!-- check if user data in local storage the redirect to dashboard -->
+        if (localStorage.getItem('user') == null) {
+            window.location.href = "/login";
+        }
+    </script>
 </head>
 
 <body>
@@ -1263,7 +1269,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 if (modalTitle.textContent == "Edit Movie") {
                     let defaultReleaseDate = document.getElementById("defaultReleaseDate")
                     defaultReleaseDate = defaultReleaseDate.textContent.split(":")[1].trim()
-                    if (defaultReleaseDate != "" && defaultReleaseDate != null) {
+                    if (formObject.releaseDate == null && defaultReleaseDate != "" && defaultReleaseDate != null) {
                         formObject.releaseDate = new Date(defaultReleaseDate)
                     } else {
                         // require message

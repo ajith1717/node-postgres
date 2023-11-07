@@ -47,7 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 require("./config/passport");
 app.get("/", (req, res) => {
-    res.redirect("/ping")
+    res.redirect("/dashboard")
 })
 
 
