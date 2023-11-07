@@ -34,8 +34,8 @@ exports.updateMovies = async (payload) => {
         let result = await updateMoviesByPayload(payload)
         if (result.success) {
             // fetch the updated movies details
-            let moviesDetails = await findMoviesByPayload({ id: payload.id })
-            result.data = moviesDetails.data
+            // let moviesDetails = await findMoviesByPayload({ id: payload.id })
+            // result.data = moviesDetails.data
             result.msg = "Successfully updated the movies details"
             return result
 

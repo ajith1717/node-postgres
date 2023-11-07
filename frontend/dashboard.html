@@ -236,7 +236,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         }
 
         .main-agileinfo {
-            width: 35%;
+            width: 100%;
             margin: 3em auto;
             background: rgba(0, 0, 0, 0.18);
             background-size: cover;
@@ -663,7 +663,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
         @media(max-width:1280px) {
             .main-agileinfo {
-                width: 40%;
+                width: 100%;
             }
         }
 
@@ -957,22 +957,45 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         }
 
         .modal-content {
-            background-color: #76b852;
+            background-color: #fefefe;
             margin: 0 auto;
-            padding: 5px;
-            /* border: 1px solid #888; */
-            width: 90%;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
         }
 
         .close {
-            color: #010101;
+            color: #aaaaaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
         }
+
+        .tag {
+            display: inline-block;
+            background-color: #e0e0e0;
+            border: 1px solid #ccc;
+            padding: 2px 6px;
+            margin: 2px;
+            border-radius: 5px;
+        }
+
+        .tag .close {
+            cursor: pointer;
+            margin-left: 4px;
+        }
+
+        .form-group {
+            display: inline-block;
+            margin-right: 20px;
+            width: 100%;
+            /* Add margin between label-input pairs if needed */
+            vertical-align: top;
+            /* Align labels and inputs at the top */
+        }
     </style>
-    <script src="index.js" nonce="your-nonce-value"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
 </head>
 
 <body>
@@ -980,27 +1003,83 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         Dashboard
         <span class="account-icon" onclick="logout()">Logout</span>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <div class="container">
         <h1>Movies</h1>
         <button id="addButton">Add Movie</button> <!-- Add button -->
-
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
-                <h2>Add Movie</h2>
-                <div class="main-agileinfo">
+                <h2 id="modalTitle">Add Movie</h2>
+                <div class="main-agileinfo" style="background-color: #76b852; width: 100%;">
                     <div class="agileits-top">
-                        <form id="createMovie" method="post">
-                            <input class="text" type="text" name="password" placeholder="Password" required="">
-                            <input type="submit" value="LOGIN">
+                        <form id="MovieForm" method="post">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input style="margin-top: 5px;" class="text email" type="text" id="name"
+                                    placeholder="Name" />
+                            </div>
+                            <div class="form-group">
+                                <label for="rating">Rating:</label>
+                                <input style="margin-top: 5px;" class="text email" type="text" id="rating"
+                                    placeholder="Rating" />
+                            </div>
+                            <div class="form-group">
+                                <label for="genre">Genre:</label>
+                                <input style="margin-top: 5px;" class="text email" type="text" id="genre"
+                                    placeholder="Genre" />
+                            </div>
+                            <div class="form-group">
+                                <label for="tag-input">Cast:</label>
+                                <input type="text" style="margin-top: 5px;" class="text email" id="tag-input"
+                                    placeholder="Cast" onkeydown="addTag(event)" />
+                            </div>
+                            <div style="color: #fefefe;" id="tag-container"></div>
+                            <div class="form-group" style="color: #fefefe;">
+                                <label for="releaseDate" id="defaultReleaseDate">Release Date:</label>
+                                <input style="margin-top: 5px;" class="text email" type="date" id="releaseDate"
+                                    placeholder="Release Date">
+                            </div>
+                            <!-- add hidden field to store id to edit -->
+                            <input type="hidden" id="defaultId" name="id" />
+
                         </form>
+                        <button class="text email" onClick="fromSubmit()"
+                            style=" margin-top: 5px; border-color: #ddd; width: 100%; height: 40px;">SUBMIT</button>
                     </div>
                 </div>
-
             </div>
         </div>
 
         <script>
+            function addTag(event) {
+                if (event.key === "Enter" && event.target.value.trim() !== "") {
+                    const tag = event.target.value.trim();
+                    event.target.value = "";
+
+                    // Create a tag element with a close button
+                    const tagElement = document.createElement("span");
+                    tagElement.classList.add("tag");
+                    tagElement.textContent = tag;
+
+                    const closeButton = document.createElement("span");
+                    closeButton.classList.add("close");
+                    closeButton.innerHTML = "&times;";
+                    closeButton.onclick = function () {
+                        tagElement.remove();
+                    };
+
+                    tagElement.appendChild(closeButton);
+
+                    // Add the tag element to the tag container
+                    const tagContainer = document.getElementById("tag-container");
+                    tagContainer.appendChild(tagElement);
+                }
+            }
+        </script>
+
+        <script>
+            let tableData = []
             function fetchAndPopulateTable() {
                 console.log(localStorage.getItem("user"))
                 const token = JSON.parse(localStorage.getItem("user")).token; // Replace with your actual token
@@ -1019,20 +1098,49 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         console.log(data)
                         const tableBody = document.querySelector('#movie-table tbody');
                         tableBody.innerHTML = '';
-
-                        data.data.forEach(movie => {
+                        tableData = data.data
+                        // sort table data by create date
+                        tableData = tableData.sort((a, b) => {
+                            return new Date(b.createdAt) - new Date(a.createdAt);
+                        });
+                        if (data.data.length > 0) {
+                            data.data.forEach(movie => {
+                                const row = document.createElement('tr');
+                                row.setAttribute('data-movie', movie.id);
+                                row.innerHTML = `
+                                <td >${movie.id}</td>
+                                <td>${movie.name}</td>
+                                <td>${movie.rating}</td>
+                                <td>${movie.genre}</td>
+                                <td>${movie.cast.join(", ")}</td>
+                                <td>${new Date(movie.releaseDate).toDateString()}</td>
+                                <td>
+                                    <button class="edit-button">Edit</button>
+                                    <button class="delete-button">Delete</button>
+                                </td>
+                                `;
+                                tableBody.appendChild(row);
+                            });
+                        } else {
                             const row = document.createElement('tr');
                             row.innerHTML = `
-          <td>${movie.name}</td>
-          <td>${movie.rating}</td>
-          <td>${movie.genre}</td>
-          <td>${movie.releaseDate}</td>
-          <td>
-            <a class="edit" href="#">Edit</a>
-            <a class="delete" href="#">Delete</a>
-          </td>
-        `;
+                                <td colspan="7" style="text-align: center;">No Data Found</td>
+                                `;
                             tableBody.appendChild(row);
+                        }
+                        // Add event listener for the entire table to handle button clicks
+                        tableBody.addEventListener('click', function (event) {
+                            if (event.target.classList.contains('edit-button')) {
+                                const row = event.target.closest('tr');
+                                console.log(row, "row")
+                                const movieId = row.getAttribute('data-movie');
+                                editMovie(movieId);
+                            }
+                            if (event.target.classList.contains('delete-button')) {
+                                const row = event.target.closest('tr');
+                                const movieId = row.getAttribute('data-movie');
+                                deleteMovie(movieId);
+                            }
                         });
                     })
                     .catch(error => {
@@ -1040,14 +1148,266 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     });
             }
 
+
+            async function editMovie(movieId) {
+                console.log(tableData, movieId, "tableData")
+                // fiter the table data
+                let movie = tableData.filter((item) => {
+                    return item.id == movieId
+                })
+                movie = movie[0]
+                let modalTitle = document.getElementById("modalTitle");
+                modalTitle.textContent = "Edit Movie";
+                document.getElementById("defaultId").value = movie.id
+
+                // set the form values
+                document.getElementById("name").value = movie.name
+                document.getElementById("rating").value = movie.rating
+                document.getElementById("genre").value = movie.genre
+                let cast = []
+                console.log(movie.cast, "movie.cast")
+                for (let item of movie.cast) {
+                    await addTag({ key: "Enter", target: { value: item } })
+
+                }
+                let defaultReleaseDate = document.getElementById("defaultReleaseDate")
+                defaultReleaseDate.textContent = "Release Date: " + new Date(movie.releaseDate).toLocaleDateString()
+                openModal()
+            }
+
+            function deleteMovie(movieId) {
+                console.log('Delete movie with ID:', movieId);
+                // confiramtion popup
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#76b852',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const token = JSON.parse(localStorage.getItem("user")).token; // Replace with your actual token
+                        console.log("token", token)
+                        const headers = {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        };
+                        fetch('http://localhost:5001/api/v1/movie/delete/' + movieId, {
+                            method: 'DELETE',
+                            headers: headers,
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Handle the API response here
+                                console.log(data);
+                                if (!data.success) {
+                                    // Display the API response using SweetAlert
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: data.msg,
+                                        icon: 'error',
+                                    });
+                                    return;
+                                } else {
+                                    // Display the API response using SweetAlert
+                                    Swal.fire({
+                                        title: 'Success',
+                                        text: data.msg,
+                                        icon: 'info',
+                                    });
+                                    // refresh
+                                    window.location.reload();
+                                    // fetch and populate table
+                                    fetchAndPopulateTable()
+                                }
+
+                                // You can also redirect the user or perform other actions based on the response.
+                            })
+                            .catch(error => {
+                                console.error('API request error:', error);
+                            });
+                    }
+                })
+
+
+            }
+
             fetchAndPopulateTable()
         </script>
-        <table id="movie-table">
+        <script>
+
+            // document.getElementById("MovieForm").addEventListener("submit", function (event) {
+            function fromSubmit() {
+                event.preventDefault(); // Prevent the default form submission
+                // // Get the form data
+                // const formData = new FormData(this);
+
+                // Convert form data to a plain object
+                const formObject = {};
+                // get value from input
+                formObject.name = document.getElementById("name").value
+                formObject.rating = document.getElementById("rating").value
+                formObject.genre = document.getElementById("genre").value
+                formObject.releaseDate = document.getElementById("releaseDate").value
+                // require message
+                if (formObject.name == "" || formObject.name == null) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: "Name  is required",
+                        icon: 'error',
+                    });
+                    return;
+                }
+                if (modalTitle.textContent == "Edit Movie") {
+                    let defaultReleaseDate = document.getElementById("defaultReleaseDate")
+                    defaultReleaseDate = defaultReleaseDate.textContent.split(":")[1].trim()
+                    if (defaultReleaseDate != "" && defaultReleaseDate != null) {
+                        formObject.releaseDate = new Date(defaultReleaseDate)
+                    } else {
+                        // require message
+                        if (formObject.releaseDate == "" || formObject.releaseDate == null) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: "Release Date is required",
+                                icon: 'error',
+                            });
+                            return;
+                        }
+                    }
+                } else {
+                    // require message
+                    if (formObject.releaseDate == "" || formObject.releaseDate == null) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: "Release Date is required",
+                            icon: 'error',
+                        });
+                        return;
+                    }
+                }
+                // check id
+                const defaultId = document.getElementById("defaultId").value
+                if (defaultId) {
+                    formObject.id = defaultId
+                }
+
+
+                // formData.forEach((value, key) => {
+                //     formObject[key] = value;
+                // });
+                // console.log(formData, "formObject")
+
+                const token = JSON.parse(localStorage.getItem("user")).token; // Replace with your actual token
+                console.log("token", token)
+                const headers = {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                };
+                // get the cast from the tag container
+                const tagContainer = document.getElementById("tag-container");
+                const castList = [];
+                console.log("tagContainer", tagContainer)
+                tagContainer.childNodes.forEach((child) => {
+                    console.log(child, "child")
+                    console.log(child.classList, "child.classList")
+                    if (child.classList && child.classList.contains("tag")) {
+                        castList.push(child.textContent.slice(0, -1));
+                    }
+                });
+                formObject.cast = castList
+                formObject.rating = parseInt(formObject.rating || 0)
+                console.log(formObject, "formObject")
+
+                if (modalTitle.textContent == "Edit Movie") {
+                    console.log("edit api")
+                    fetch('http://localhost:5001/api/v1/movie/update', {
+                        method: 'PUT',
+                        headers: headers,
+                        body: JSON.stringify(formObject), // Convert the form data to JSON
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Handle the API response here
+                            console.log(data);
+                            if (!data.success) {
+                                // Display the API response using SweetAlert
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: data.msg,
+                                    icon: 'error',
+                                });
+                                return;
+                            } else {
+                                // Display the API response using SweetAlert
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: data.msg,
+                                    icon: 'info',
+                                });
+                                // close the modal
+                                closeModal();
+                                // refresh
+                                window.location.reload();
+                                // fetch and populate table
+                                fetchAndPopulateTable()
+                            }
+
+                            // You can also redirect the user or perform other actions based on the response.
+                        })
+                        .catch(error => {
+                            console.error('API request error:', error);
+                        });
+                } else {
+                    fetch('http://localhost:5001/api/v1/movie/create', {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify(formObject), // Convert the form data to JSON
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Handle the API response here
+                            console.log(data);
+                            if (!data.success) {
+                                // Display the API response using SweetAlert
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: data.msg,
+                                    icon: 'error',
+                                });
+                                return;
+                            } else {
+                                // Display the API response using SweetAlert
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: data.msg,
+                                    icon: 'info',
+                                });
+                                // close the modal
+                                closeModal();
+                                window.location.reload();
+
+                                // fetch and populate table
+                                fetchAndPopulateTable()
+                            }
+
+                            // You can also redirect the user or perform other actions based on the response.
+                        })
+                        .catch(error => {
+                            console.error('API request error:', error);
+                        });
+                }
+            }
+        </script>
+        <table id="movie-table" style="max-width: 100%">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Name</th>
                     <th>Rating</th>
                     <th>Genre</th>
+                    <th>Cast</th>
                     <th>Release Date</th>
                     <th>Actions</th>
                 </tr>
@@ -1063,12 +1423,31 @@ License URL: http://creativecommons.org/licenses/by/3.0/
             }
 
             function closeModal() {
+                const modalTitle = document.getElementById("modalTitle");
+                modalTitle.textContent = "Add Movie";
+                document.getElementById("defaultId").value = ""
+
+                // set the form values
+                document.getElementById("name").value = ""
+                document.getElementById("rating").value = ""
+                document.getElementById("genre").value = ""
+                document.getElementById("releaseDate").value = ""
+                let cast = []
+
+                let defaultReleaseDate = document.getElementById("defaultReleaseDate")
+                defaultReleaseDate.textContent = "Release Date:"
+                const tagContainer = document.getElementById("tag-container");
+                tagContainer.textContent = ""
                 document.getElementById("myModal").style.display = "none";
+
             }
+
+
 
             document.getElementById("addButton").addEventListener("click", function () {
                 openModal();
             });
+
 
             document.getElementById("movieForm").addEventListener("submit", function (e) {
                 e.preventDefault();

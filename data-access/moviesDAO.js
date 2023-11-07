@@ -22,7 +22,8 @@ exports.createMovies = (payload) => {
 
 // function used to find movies by payload
 exports.findMoviesByEmail = async (payload) => {
-    return await sequelize.query(`SELECT * FROM movies WHERE email = '${payload.email}'`, { type: sequelize.QueryTypes.SELECT })
+    //  WHERE email = '${payload.email}'
+    return await sequelize.query(`SELECT * FROM movies`, { type: sequelize.QueryTypes.SELECT })
         .then(result => {
             return {
                 success: true,

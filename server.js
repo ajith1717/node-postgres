@@ -70,6 +70,11 @@ app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend/dashboard.html'));
 })
 
+app.get('/addMovie', (req, res) => {
+    res.set("Content-Security-Policy", "default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'")
+    res.sendFile(path.join(__dirname, 'frontend/addMovie.html'));
+})
+
 app.get("/ping", (req, res) => {
     console.log("PING")
     res.json({
